@@ -22,6 +22,15 @@ function App() {
 
     const [ filter, setFilter ] = useState(Filters.all)
 
+    function addNewTask (value: string) {
+        const newValue = {
+            id: v1(),
+            title: value,
+            isDone: false
+        }
+        setTasks([newValue, ...tasks1])
+    }
+
     function deleteTodo (id: string) {
         setTasks(tasks1.filter(task => task.id !== id))
     }
@@ -43,6 +52,7 @@ function App() {
                   tasks={ filteredTasks }
                   deleteTodo={ deleteTodo }
                   changeFilter={ changeFilter }
+                  addNewTask={ addNewTask }
         />
     </div>
   );
