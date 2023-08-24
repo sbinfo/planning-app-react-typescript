@@ -18,8 +18,6 @@ function App() {
         { id: v1(), title: 'Node.js', isDone: false },
     ])
 
-    console.log(tasks1)
-
     const [ filter, setFilter ] = useState(Filters.all)
 
     function addNewTask (value: string) {
@@ -29,6 +27,16 @@ function App() {
             isDone: false
         }
         setTasks([newValue, ...tasks1])
+    }
+
+    function changeTodoStatus (id: string, isDone: boolean) {
+        let task = tasks1.find(t => t.id === id)
+        
+        if (task) {
+            task.isDone = isDone
+        }
+
+        setTasks([...tasks1])
     }
 
     function deleteTodo (id: string) {
@@ -49,10 +57,11 @@ function App() {
   return (
     <div className="App">
         <TodoList title="What to learn?"
-                  tasks={ filteredTasks }
-                  deleteTodo={ deleteTodo }
-                  changeFilter={ changeFilter }
-                  addNewTask={ addNewTask }
+                  tasks={filteredTasks}
+                  deleteTodo={deleteTodo}
+                  changeFilter={changeFilter}
+                  addNewTask={addNewTask}
+                  changeTodoStatus={changeTodoStatus}
         />
     </div>
   );
