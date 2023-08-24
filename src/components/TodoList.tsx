@@ -11,24 +11,39 @@ export type TaskType = {
 type PropsType = {
     title: string,
     tasks: Array<TaskType>,
+    filter: Filters,
     deleteTodo: (id: string) => void,
     changeFilter: (filter: Filters) => void,
     addNewTask: (value: string) => void,
     changeTodoStatus: (id: string, isDone: boolean) => void
 }
 
-function TodoList ({ title, tasks, deleteTodo, changeFilter, addNewTask, changeTodoStatus }: PropsType) {
+function TodoList (props: PropsType) {
+
+    const {
+        title,
+        tasks,
+        filter,
+        deleteTodo,
+        changeFilter,
+        addNewTask,
+        changeTodoStatus
+    } = props
 
     const [newTaskTitle, setNewTaskTitle] = useState('')
+    const [error, setError] = useState<string | null>(null)
 
     const onAddNewTask = () => {
         if (newTaskTitle.trim() !== '') {
-            addNewTask(newTaskTitle)
+            addNewTask(newTaskTitle.trim())
             setNewTaskTitle('')
+        } else {
+            setError('Field is required')
         }
     }
 
     const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        setError(null)
         if (e.key === 'Enter') {
             onAddNewTask()
         }
@@ -47,8 +62,10 @@ function TodoList ({ title, tasks, deleteTodo, changeFilter, addNewTask, changeT
                     value={newTaskTitle}
                     onChange={onNewTaskTitleChangeHandler}
                     onKeyDown={onKeyDownHandler}
+                    className={ error ? "error" : "" }
                 />
                 <button onClick={onAddNewTask}>+</button>
+                { error && <div className="error-message">{ error }</div>}
             </div>
             <ul>
                 {
@@ -68,7 +85,7 @@ function TodoList ({ title, tasks, deleteTodo, changeFilter, addNewTask, changeT
                                        checked={task.isDone}
                                        onChange={onChangeHandler}
                                 />
-                                <span>{ task.title }</span>
+                                <span className={ task.isDone ? 'is-done' : '' }>{ task.title }</span>
                                 <button onClick={onClickHandler}>Delete</button>
                             </li>
                         )
@@ -76,9 +93,12 @@ function TodoList ({ title, tasks, deleteTodo, changeFilter, addNewTask, changeT
                 }
             </ul>
             <div>
-                <button onClick={ () => changeFilter(Filters.all) }>All</button>
-                <button onClick={ () => changeFilter(Filters.active) }>Active</button>
-                <button onClick={ () => changeFilter(Filters.completed) }>Completed</button>
+                <button onClick={ () => changeFilter(Filters.all) }
+                        className={ filter === Filters.all ? 'active-filter' : ''}>All</button>
+                <button onClick={ () => changeFilter(Filters.active) }
+                        className={ filter === Filters.active ? 'active-filter' : ''}>Active</button>
+                <button onClick={ () => changeFilter(Filters.completed) }
+                        className={ filter === Filters.completed ? 'active-filter' : ''}>Completed</button>
             </div>
         </div>
     )
