@@ -13,10 +13,10 @@ type PropsType = {
     title: string,
     tasks: Array<TaskType>,
     filter: Filters,
-    deleteTodo: (id: string) => void,
+    deleteTodo: (todolistId: string, id: string) => void,
     changeFilter: (id: string, filter: Filters) => void,
-    addNewTask: (value: string) => void,
-    changeTodoStatus: (id: string, isDone: boolean) => void
+    addNewTask: (todolistId: string, value: string) => void,
+    changeTodoStatus: (todolistId: string, id: string, isDone: boolean) => void
 }
 
 function TodoList (props: PropsType) {
@@ -37,7 +37,7 @@ function TodoList (props: PropsType) {
 
     const onAddNewTask = () => {
         if (newTaskTitle.trim() !== '') {
-            addNewTask(newTaskTitle.trim())
+            addNewTask(id, newTaskTitle.trim())
             setNewTaskTitle('')
         } else {
             setError('Field is required')
@@ -74,11 +74,11 @@ function TodoList (props: PropsType) {
                     tasks.map((task) => {
 
                         const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                            changeTodoStatus(task.id, e.currentTarget.checked)
+                            changeTodoStatus(id, task.id, e.currentTarget.checked)
                         }
 
                         const onClickHandler = () => {
-                            deleteTodo(task.id)
+                            deleteTodo(id, task.id)
                         }
 
                         return (
