@@ -9,11 +9,12 @@ export type TaskType = {
 }
 
 type PropsType = {
+    id: string,
     title: string,
     tasks: Array<TaskType>,
     filter: Filters,
     deleteTodo: (id: string) => void,
-    changeFilter: (filter: Filters) => void,
+    changeFilter: (id: string, filter: Filters) => void,
     addNewTask: (value: string) => void,
     changeTodoStatus: (id: string, isDone: boolean) => void
 }
@@ -21,6 +22,7 @@ type PropsType = {
 function TodoList (props: PropsType) {
 
     const {
+        id,
         title,
         tasks,
         filter,
@@ -93,11 +95,11 @@ function TodoList (props: PropsType) {
                 }
             </ul>
             <div>
-                <button onClick={ () => changeFilter(Filters.all) }
+                <button onClick={ () => changeFilter(id, Filters.all) }
                         className={ filter === Filters.all ? 'active-filter' : ''}>All</button>
-                <button onClick={ () => changeFilter(Filters.active) }
+                <button onClick={ () => changeFilter(id, Filters.active) }
                         className={ filter === Filters.active ? 'active-filter' : ''}>Active</button>
-                <button onClick={ () => changeFilter(Filters.completed) }
+                <button onClick={ () => changeFilter(id, Filters.completed) }
                         className={ filter === Filters.completed ? 'active-filter' : ''}>Completed</button>
             </div>
         </div>
