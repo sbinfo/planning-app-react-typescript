@@ -2,11 +2,18 @@ import React, { useState } from 'react';
 import './App.css';
 import TodoList, { TaskType } from './components/TodoList';
 import { v1 } from 'uuid';
+import AddItemForm from './components/AddItemForm';
 
 export enum Filters {
     all = 'all',
     active = 'active',
     completed = 'completed'
+}
+
+type TodoListType = {
+    id: string
+    title: string
+    filter: Filters
 }
 
 function App() {
@@ -17,8 +24,8 @@ function App() {
     
 
     const [todoList, setTodoList] = useState([
-        { id: idTodoList1, title: 'What to learn?', filter: Filters.active },
-        { id: idTodoList2, title: 'List for read', filter: Filters.completed },
+        { id: idTodoList1, title: 'What to learn?', filter: Filters.all },
+        { id: idTodoList2, title: 'List for read', filter: Filters.all },
     ])
 
     const [tasks, setTasks] = useState({
@@ -38,15 +45,11 @@ function App() {
     })
 
     function addNewTask(todolistId: string, value: string) {
+        const newValue = { id: v1(), title: value, isDone: false }
+
         let tempTasks = tasks[todolistId]
-
-        const newValue = {
-            id: v1(),
-            title: value,
-            isDone: false
-        }
-
         tasks[todolistId] = [newValue, ...tempTasks]
+
         setTasks({ ...tasks })
     }
 
@@ -79,8 +82,30 @@ function App() {
         }
     }
 
+    function removeTodoList(todolistId: string) {
+        const newTodoList = todoList.filter(todo => todo.id !== todolistId)
+        setTodoList(newTodoList)
+        
+        delete tasks[todolistId]
+        setTasks({ ...tasks })
+    }
+
+    function addTodoList (title: string) {
+        let newTodoList: TodoListType = {
+            id: v1(),
+            title: title,
+            filter: Filters.all
+        }
+        setTodoList([newTodoList, ...todoList])
+        setTasks({
+            ...tasks,
+            [newTodoList.id]: []
+        })
+    }
+
     return (
         <div className="App">
+            <AddItemForm addItem={addTodoList} />
             {
                 todoList.map((todo) => {
 
@@ -103,6 +128,7 @@ function App() {
                             changeFilter={changeFilter}
                             addNewTask={addNewTask}
                             changeTodoStatus={changeTodoStatus}
+                            removeTodoList={removeTodoList}
                         />
                     )
                 })
