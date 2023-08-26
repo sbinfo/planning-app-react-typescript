@@ -1,4 +1,6 @@
-import { ChangeEvent, HtmlHTMLAttributes, useState } from "react"
+import { ChangeEvent, useState } from "react"
+
+import { IconButton, TextField } from "@mui/material"
 
 
 type EditableTitleProps = {
@@ -25,7 +27,8 @@ function EditableTaskTitle (props: EditableTitleProps) {
 
     return (
         editMode 
-        ? <input
+        ? <TextField
+            size="small"
             value={localTitle}
             onChange={onChangeTitleHandler}
             onBlur={deactivateEditMode}

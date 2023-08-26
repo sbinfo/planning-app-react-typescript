@@ -22,3 +22,8 @@
 .is-done {
     opacity: 0.5;
 }
+
+.todo-list {
+    list-style: none;
+    padding-left: 0;
+}

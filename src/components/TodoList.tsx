@@ -4,6 +4,10 @@ import { Filters } from '../App';
 import AddItemForm from './AddItemForm';
 import EditableTaskTitle from './EditableTaskTitle';
 
+// Material
+import { Button, ButtonGroup, IconButton, Checkbox } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
+
 export type TaskType = {
     id: string
     title: string
@@ -56,12 +60,14 @@ function TodoList(props: PropsType) {
         <div>
             <h3>
                 <EditableTaskTitle title={title} onChange={onChangeTodoListTitle} />
-                <button onClick={onRemoveTodoListHandler}>x</button>    
+                <IconButton aria-label="delete" onClick={onRemoveTodoListHandler}>
+                    <DeleteIcon />
+                </IconButton>
             </h3>
             <AddItemForm
                 addItem={addTask}
             />
-            <ul>
+            <ul className='todo-list'>
                 {
                     tasks.map((task) => {
 
@@ -78,25 +84,47 @@ function TodoList(props: PropsType) {
                         }
 
                         return (
-                            <li key={task.id } className={task.isDone ? 'is-done' : ''}>
-                                <input type="checkbox"
+                            <li key={task.id} className={task.isDone ? 'is-done' : ''}>
+
+                                <Checkbox
                                     checked={task.isDone}
                                     onChange={onChangeStatusHandler}
                                 />
+                                
+                                {/* <input type="checkbox"
+                                    checked={task.isDone}
+                                    onChange={onChangeStatusHandler}
+                                /> */}
                                 <EditableTaskTitle title={task.title} onChange={onChangeTitleHandler} />
-                                <button onClick={onClickHandler}>Delete</button>
+                                <IconButton aria-label="delete" onClick={onClickHandler}>
+                                    <DeleteIcon />
+                                </IconButton>
                             </li>
                         )
                     })
                 }
             </ul>
             <div>
-                <button onClick={() => changeFilter(todolistId, Filters.all)}
-                    className={filter === Filters.all ? 'active-filter' : ''}>All</button>
-                <button onClick={() => changeFilter(todolistId, Filters.active)}
-                    className={filter === Filters.active ? 'active-filter' : ''}>Active</button>
-                <button onClick={() => changeFilter(todolistId, Filters.completed)}
-                    className={filter === Filters.completed ? 'active-filter' : ''}>Completed</button>
+                <ButtonGroup variant="outlined" aria-label="outlined button group">
+                    <Button
+                        onClick={() => changeFilter(todolistId, Filters.all)}
+                        variant={filter === Filters.all ? "contained" : "outlined"}
+                    >
+                        All
+                    </Button>
+                    <Button
+                        onClick={() => changeFilter(todolistId, Filters.active)}
+                        variant={filter === Filters.active ? "contained" : "outlined"}
+                    >
+                        Active
+                    </Button>
+                    <Button
+                        onClick={() => changeFilter(todolistId, Filters.completed)}
+                        variant={filter === Filters.completed ? "contained" : "outlined"}
+                    >
+                        Completed
+                    </Button>
+                </ButtonGroup>
             </div>
         </div>
     )
