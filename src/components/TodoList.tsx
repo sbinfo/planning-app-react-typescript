@@ -67,7 +67,7 @@ function TodoList(props: PropsType) {
             <AddItemForm
                 addItem={addTask}
             />
-            <ul className='todo-list'>
+            <div style={{ margin: '10px 0' }}>
                 {
                     tasks.map((task) => {
 
@@ -84,7 +84,7 @@ function TodoList(props: PropsType) {
                         }
 
                         return (
-                            <li key={task.id} className={task.isDone ? 'is-done' : ''}>
+                            <div key={task.id} className={task.isDone ? 'is-done' : ''}>
 
                                 <Checkbox
                                     checked={task.isDone}
@@ -99,11 +99,11 @@ function TodoList(props: PropsType) {
                                 <IconButton aria-label="delete" onClick={onClickHandler}>
                                     <DeleteIcon />
                                 </IconButton>
-                            </li>
+                            </div>
                         )
                     })
                 }
-            </ul>
+            </div>
             <div>
                 <ButtonGroup variant="outlined" aria-label="outlined button group">
                     <Button
