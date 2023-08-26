@@ -16,6 +16,10 @@ type TodoListType = {
     filter: Filters
 }
 
+type TaskObjType = {
+    [key: string]: Array<TaskType>
+}
+
 function App() {
 
     const idTodoList1 = v1()
@@ -23,12 +27,12 @@ function App() {
 
     
 
-    const [todoList, setTodoList] = useState([
+    const [todoList, setTodoList] = useState<TodoListType[]>([
         { id: idTodoList1, title: 'What to learn?', filter: Filters.all },
         { id: idTodoList2, title: 'List for read', filter: Filters.all },
     ])
 
-    const [tasks, setTasks] = useState({
+    const [tasks, setTasks] = useState<TaskObjType>({
         [idTodoList1]: [
             { id: v1(), title: 'Html5 & CSS3', isDone: true },
             { id: v1(), title: 'Javascript', isDone: true },
@@ -59,7 +63,17 @@ function App() {
 
         if (findedTask) {
             findedTask.isDone = isDone
-            tasks[todolistId] = [...tempTasks]
+            setTasks({ ...tasks })
+        }
+    }
+
+    function changeTodoTitle(todolistId: string, id: string, title: string) {
+        let tempTasks = tasks[todolistId]
+        const findedTask = tempTasks.find(t => t.id === id)
+
+        if (findedTask) {
+            findedTask.title = title
+            // tasks[todolistId] = [...tempTasks]
             setTasks({ ...tasks })
         }
     }
@@ -78,6 +92,14 @@ function App() {
         let todo = todoList.find(item => item.id === id)
         if (todo) {
             todo.filter = filter
+            setTodoList([...todoList])
+        }
+    }
+
+    function changeTodoListTitle(todolistId: string, title: string) {
+        const findedList = todoList.find(item => item.id === todolistId)
+        if (findedList) {
+            findedList.title = title
             setTodoList([...todoList])
         }
     }
@@ -120,7 +142,7 @@ function App() {
                     return (
                         <TodoList
                             key={todo.id}
-                            id={todo.id}
+                            todolistId={todo.id}
                             title={todo.title}
                             tasks={filteredTasks}
                             filter={todo.filter}
@@ -128,7 +150,9 @@ function App() {
                             changeFilter={changeFilter}
                             addNewTask={addNewTask}
                             changeTodoStatus={changeTodoStatus}
+                            changeTodoTitle={changeTodoTitle}
                             removeTodoList={removeTodoList}
+                            changeTodoListTitle={changeTodoListTitle}
                         />
                     )
                 })
